@@ -96,6 +96,10 @@ class BaseAWSObject(object):
             # what we were expecting. Special case AWS helper functions.
             elif isinstance(value, expected_type):
                 return self.properties.__setitem__(name, value)
+            # If this is an AWS object, the assumption is that we want
+            # a Ref to it
+            elif isinstance(value, AWSObject):
+                return self.properties.__setitem__(name, Ref(value))
             else:
                 self._raise_type(name, value, expected_type)
 
