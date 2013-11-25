@@ -46,6 +46,7 @@ class FakeAWSObject(AWSObject):
         'multilist': ([bool, int, float], False),
         'multituple': ((basestring, int), False),
         'helperfun': (positive_integer, False),
+        'stringref': (basestring, False),
     }
 
     def validate(self):
@@ -100,6 +101,16 @@ class TestValidators(unittest.TestCase):
 
     def test_helperfun(self):
         FakeAWSObject('fake', helperfun=Ref('fake_ref'))
+
+    def test_obj_ref(self):
+        """
+        Test that references to objects are converted to Refs
+        """
+        referenced_fake = FakeAWSObject("referenced")
+        target_fake = FakeAWSObject("target")
+        target_fake.stringref = referenced_fake
+        self.assertTrue(isinstance(target_fake.stringref, Ref))
+
 
 
 class TestHealthCheck(unittest.TestCase):
