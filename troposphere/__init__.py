@@ -98,7 +98,7 @@ class BaseAWSObject(object):
                 return self.properties.__setitem__(name, value)
             # If this is an AWS object, the assumption is that we want
             # a Ref to it
-            elif isinstance(value, AWSObject):
+            elif expected_type == basestring and isinstance(value, AWSObject):
                 return self.properties.__setitem__(name, Ref(value))
             else:
                 self._raise_type(name, value, expected_type)
